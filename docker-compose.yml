@@ -1,0 +1,38 @@
+services:
+  clickhouse:
+    image: clickhouse/clickhouse-server:latest
+    container_name: clickhouse
+    ports:
+      - "8123:8123"
+    environment:
+      CLICKHOUSE_USER: default
+      CLICKHOUSE_PASSWORD: password
+      CLICKHOUSE_DB: default
+    volumes:
+      - clickhouse_data:/var/lib/clickhouse
+      
+  ch-ui:
+    image: ghcr.io/caioricciuti/ch-ui:latest
+    restart: always
+    ports:
+      - "${CH_UI_PORT:-5521}:5521"
+    environment:
+      VITE_CLICKHOUSE_URL: "http://127.0.0.1:8123" 
+      VITE_CLICKHOUSE_USER: "default"
+      VITE_CLICKHOUSE_PASS: "password" 
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - HELIUS_API_KEY=f24d31f5-c77c-4e51-b355-cb8e98ee92c2
+    depends_on:
+      - clickhouse
+    volumes:
+      - ./logs:/app/logs
+
+volumes:
+  clickhouse_data:
