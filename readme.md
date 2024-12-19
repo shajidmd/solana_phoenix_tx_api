@@ -29,12 +29,6 @@ To start the associated services (ClickHouse, UI):
 # Start the services
 docker-compose up -d
 ```
-### Running the Testcases
-To Run Testcases:
-```bash
-cargo test
-```
-
 
 ### Running the Application
 To start the API:
