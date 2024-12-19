@@ -1,10 +1,10 @@
 # Solana Phoenix Transaction API
 
 ## Overview
-This project provides an API for processing and querying transaction data from the Solana blockchain, with support for OHLC (Open, High, Low, Close) data computation using a ClickHouse database backend.
+This project provides an API for processing and querying transaction data for the Phoenix Program from the Solana blockchain, with support for OHLC (Open, High, Low, Close) data computation using a ClickHouse database backend.
 
 ## Features
-- Fetch and parse transactions from Solana blockchain.
+- Fetch and parse transactions for the Phoenix Program from the Solana blockchain.
 - Insert parsed transaction events into a ClickHouse database.
 - Provide OHLC data for queried token pairs via an HTTP API.
 - Implement rate limiting and user credit checks.
@@ -23,11 +23,23 @@ Dependencies are managed using Docker. Build and set up the project with:
 docker-compose build
 ```
 
-### Running the Application
-To start the API and associated services (ClickHouse, UI):
+### Running the Services
+To start the associated services (ClickHouse, UI):
 ```bash
 # Start the services
-docker-compose up
+docker-compose up -d
+```
+### Running the Testcases
+To Run Testcases:
+```bash
+cargo test
+```
+
+
+### Running the Application
+To start the API:
+```bash
+cargo run
 ```
 
 The API will be accessible at `http://localhost:8080`. ClickHouse UI will be available at `http://localhost:5521`.
@@ -63,10 +75,10 @@ curl "http://localhost:8080/ohlc?user_id=test_user&base_token_mint=base_mint&quo
 **Response:**
 ```json
 {
-  "open": 100,
-  "high": 200,
-  "low": 50,
-  "close": 150
+    "open": 3388,
+    "high": 3392,
+    "low": 3390,
+    "close": 3392
 }
 ```
 

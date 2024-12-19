@@ -1,6 +1,6 @@
 // database.rs
-use clickhouse::{Client, Row};
 use anyhow::Result;
+use clickhouse::{Client, Row};
 
 use crate::api::OHLCQuery;
 use crate::api::OHLCResponse;
@@ -38,8 +38,8 @@ pub async fn insert_fill_event(event: PhoenixEvent, metadata: MarketMetadata) ->
             .with_password("password");
 
         let side_as_string = match side_filled {
-                phoenix::state::enums::Side::Bid => "Bid",
-                phoenix::state::enums::Side::Ask => "Ask",
+            phoenix::state::enums::Side::Bid => "Bid",
+            phoenix::state::enums::Side::Ask => "Ask",
         };
 
         let query = format!(
@@ -98,7 +98,10 @@ pub async fn insert_fill_event(event: PhoenixEvent, metadata: MarketMetadata) ->
     Ok(())
 }
 
-pub async fn fetch_ohlc_data(client: &Client, query: &OHLCQuery) -> Result<OHLCResponse, Box<dyn std::error::Error>> {
+pub async fn fetch_ohlc_data(
+    client: &Client,
+    query: &OHLCQuery,
+) -> Result<OHLCResponse, Box<dyn std::error::Error>> {
     let interval_duration = match query.interval.as_str() {
         "1m" => 1,
         "1h" => 60,
@@ -123,10 +126,7 @@ pub async fn fetch_ohlc_data(client: &Client, query: &OHLCQuery) -> Result<OHLCR
         "#,
         query.base_token_mint, query.quote_token_mint, start_time, end_time, interval_duration
     );
-    let rows = client
-        .query(&sql)
-        .fetch_all::<OHLCRow>()
-        .await?;
+    let rows = client.query(&sql).fetch_all::<OHLCRow>().await?;
 
     if let Some(row) = rows.first() {
         Ok(OHLCResponse {
@@ -145,9 +145,15 @@ struct CreditsRow {
     credits: u64,
 }
 
-pub async fn check_and_update_credits(client: &Client, user_id: &str) -> Result<(), Box<dyn std::error::Error>> {
+pub async fn check_and_update_credits(
+    client: &Client,
+    user_id: &str,
+) -> Result<(), Box<dyn std::error::Error>> {
     // Check current credits
-    let credits_query = format!("SELECT credits FROM user_credits WHERE user_id = '{}'", user_id);
+    let credits_query = format!(
+        "SELECT credits FROM user_credits WHERE user_id = '{}'",
+        user_id
+    );
     let row: CreditsRow = client.query(&credits_query).fetch_one().await?;
 
     if row.credits == 0 {
@@ -163,7 +169,6 @@ pub async fn check_and_update_credits(client: &Client, user_id: &str) -> Result<
 
     Ok(())
 }
-
 
 #[cfg(test)]
 mod tests {
@@ -222,12 +227,11 @@ mod tests {
                 Ok(())
             }
         }
-		
+
         let mock_client = MockClient;
         let result = mock_client.insert("mock_query").await;
 
         assert!(result.is_ok());
-
     }
 
     #[tokio::test]
