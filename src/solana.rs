@@ -19,6 +19,8 @@ pub use phoenix_sdk_core::{
     sdk_client_core::{MarketMetadata, SDKClientCore},
 };
 
+// AI Generated Error Handling -- Start
+// Error handling in Rust, particularly with Result and Option types, can be verbose and nuanced and to save time on boilerplate implementations while focusing on the core logic of the assignment.
 #[derive(Error, Debug)]
 pub enum FetchError {
     // Errors related to public key processing
@@ -55,6 +57,8 @@ pub enum FetchError {
     #[error("Error initializing RPC client")]
     RPCInitializationError,
 }
+// AI Generated Error Handling -- End
+
 
 pub async fn fetch_and_parse_transactions(
     client: &BlockingRpcClient,

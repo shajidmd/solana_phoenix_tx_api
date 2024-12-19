@@ -170,6 +170,8 @@ pub async fn check_and_update_credits(
     Ok(())
 }
 
+// AI Generated Test cases
+// Mocks involve repetitive boilerplate and syntax
 #[cfg(test)]
 mod tests {
     use super::*;
