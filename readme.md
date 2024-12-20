@@ -84,6 +84,7 @@ http://localhost:5521
 Use the default credentials provided in the `docker-compose.yml` file.
 
 ## ClickHouse Tables
+Create these tables before running the application:
 
 ### `trade_fill_events`
 This table stores transaction fill event data from the Solana blockchain.
@@ -140,6 +141,15 @@ ENGINE = MergeTree
 PARTITION BY toYYYYMM(last_updated)
 ORDER BY (user_id)
 SETTINGS index_granularity = 8192;
+```
+
+and then insert records in the user_credits table:
+```
+INSERT INTO user_credits (user_id, credits, last_updated)
+VALUES
+    ('eoin', 100, now()),
+    ('shajid', 5, now()),
+    ('morgan', 200, now());
 ```
 
 ## Assumptions
